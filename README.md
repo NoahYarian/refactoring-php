@@ -70,3 +70,27 @@ You earned 4 frequent renter points
 
 I spent about an hour getting into the project and making the HTML output as specified. Everything else took about 1.5 or maybe 2 hours.
 
+To run this in OS X -
+$ php -S localhost:8000
+access in web browser at http://localhost:8000
+
+To add/change/remove Sections, do so in index.php by working with the section instances towards the top of the file.
+You may now change the rental cost details as well as the reward point structure by changing what numbers are given to the Section constructors.
+
+This long string of numbers is somewhat cumbersome, and in JavaScript my solution here would be to have an options object that is passed in with multiple key/value pairs in stead of multiple parameters. For example, instead of
+
+function movie(name, releaseDate, studio, director, boxOffice, tomatoMeter, tomatoVotes, imdbRating, imdbVotes) {
+  console.log(name, releaseDate, studio, director);
+}
+
+I might do something like
+
+function movie(name, options) {
+  console.log(name, options.releaseDate, options.studio, options.director);
+}
+
+This also allows for default values or skipped arguments. Not sure how this knd of thing works in PHP.
+
+As I commented in the file, there is duplication of a big block of code that could be taken care of. Again, I know how to do this in JS easily, but I'm leaving it alone in PHP as this is the first time I've actually worked with the language!
+
+Also I'm getting "Invalid request (Unexpected EOF)" periodically in my log... I'm curious what im missing. Guessing I need something like PHP_EOF somewhere?

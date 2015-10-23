@@ -55,11 +55,6 @@ class Section
         $this->addtlPointsAfter = $addtlPointsAfter;
     }
 
-    // public function __destruct() // useful? I'm not sure. Just saw this was possible.... looks like there's more to it than this... just an idea for now.
-    // {
-    //     print "Destroying " . $this->name . "\n";
-    // }
-
     /**
      * @return string
      */
