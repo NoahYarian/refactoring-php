@@ -62,3 +62,11 @@ You earned 4 frequent renter points
 2. Include a rough estimate of how much time you spent working on the assignment.
 3. Also include any additional instructions / requirements for running your solution.
 4. Finally, please feel free - though you're not required - to provide some "documentation" to justify any tradeoffs you might have made when writing the code and what implications those tradeoffs may have in the future - especially for the second "task" above.
+
+
+
+
+### Delivery!
+
+I spent about an hour getting into the project and making the HTML output as specified. Everything else took about 1.5 or maybe 2 hours.
+

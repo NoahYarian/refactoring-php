@@ -47,32 +47,26 @@ class Customer
 
         $result = 'Rental Record for ' . $this->name() . PHP_EOL;
 
-        foreach ($this->rentals as $rental) {
+        foreach ($this->rentals as $rental) {  // It seems like it would be better to abstract this out or have a parameter that could be "html" to control how the result is constructed below.
             $thisAmount = 0;
 
-            switch($rental->movie()->priceCode()) {
-                case Movie::REGULAR:
-                    $thisAmount += 2;
-                    if ($rental->daysRented() > 2) {
-                        $thisAmount += ($rental->daysRented() - 2) * 1.5; // $2 for 2 days, $1.50/day thereafter
-                    }
-                    break;
-                case Movie::NEW_RELEASE:
-                    $thisAmount += $rental->daysRented() * 3; // $3/day
-                    break;
-                case Movie::CHILDRENS:
-                    $thisAmount += 1.5;
-                    if ($rental->daysRented() > 3) {
-                        $thisAmount += ($rental->daysRented() - 3) * 1.5; // $1.50 for 4 days, $1.50/day thereafter
-                    }
-                    break;
+            $initialPrice = $rental->movie()->section()->initialPrice();
+            $initialPeriod = $rental->movie()->section()->initialPeriod();
+            $pricePerDay = $rental->movie()->section()->pricePerDay();
+            $pointsForRenting = $rental->movie()->section()->pointsForRenting();
+            $addtlPoints = $rental->movie()->section()->addtlPoints();
+            $addtlPointsAfter = $rental->movie()->section()->addtlPointsAfter();
+
+            $thisAmount += $initialPrice;
+            if ($rental->daysRented() > $initialPeriod) {
+                $thisAmount += ($rental->daysRented() - $initialPeriod) * $pricePerDay;
             }
 
             $totalAmount += $thisAmount;
 
-            $frequentRenterPoints++;
-            if ($rental->movie()->priceCode() === Movie::NEW_RELEASE && $rental->daysRented() > 1) {
-                $frequentRenterPoints++;
+            $frequentRenterPoints += $pointsForRenting;
+            if ($rental->daysRented() > $addtlPointsAfter) {
+                $frequentRenterPoints += $addtlPoints;
             }
 
             $result .= "\t" . str_pad($rental->movie()->name(), 30, ' ', STR_PAD_RIGHT) . "\t" . $thisAmount . PHP_EOL;
@@ -87,7 +81,7 @@ class Customer
     /**
      * @return string
      */
-    public function htmlStatement()
+    public function htmlStatement() // initial HTML output completed in 1 hour. Time includes reading project files and setting up environment
     {
         $totalAmount = 0;
         $frequentRenterPoints = 0;
@@ -95,32 +89,26 @@ class Customer
         $result = '<h1>Rental Record for <em>' . $this->name() . '</em></h1>' . PHP_EOL;
         $result .= '<ul>' . PHP_EOL;
 
-        foreach ($this->rentals as $rental) {
+        foreach ($this->rentals as $rental) {  // It seems like it would be better to abstract this out or have a parameter that could be "html" to control how the result is constructed below.
             $thisAmount = 0;
 
-            switch($rental->movie()->priceCode()) {
-                case Movie::REGULAR:
-                    $thisAmount += 2;
-                    if ($rental->daysRented() > 2) {
-                        $thisAmount += ($rental->daysRented() - 2) * 1.5; // $2 for 2 days, $1.50/day thereafter
-                    }
-                    break;
-                case Movie::NEW_RELEASE:
-                    $thisAmount += $rental->daysRented() * 3; // $3/day
-                    break;
-                case Movie::CHILDRENS:
-                    $thisAmount += 1.5;
-                    if ($rental->daysRented() > 3) {
-                        $thisAmount += ($rental->daysRented() - 3) * 1.5; // $1.50 for 4 days, $1.50/day thereafter
-                    }
-                    break;
+            $initialPrice = $rental->movie()->section()->initialPrice();
+            $initialPeriod = $rental->movie()->section()->initialPeriod();
+            $pricePerDay = $rental->movie()->section()->pricePerDay();
+            $pointsForRenting = $rental->movie()->section()->pointsForRenting();
+            $addtlPoints = $rental->movie()->section()->addtlPoints();
+            $addtlPointsAfter = $rental->movie()->section()->addtlPointsAfter();
+
+            $thisAmount += $initialPrice;
+            if ($rental->daysRented() > $initialPeriod) {
+                $thisAmount += ($rental->daysRented() - $initialPeriod) * $pricePerDay;
             }
 
             $totalAmount += $thisAmount;
 
-            $frequentRenterPoints++;
-            if ($rental->movie()->priceCode() === Movie::NEW_RELEASE && $rental->daysRented() > 1) {
-                $frequentRenterPoints++;
+            $frequentRenterPoints += $pointsForRenting;
+            if ($rental->daysRented() > $addtlPointsAfter) {
+                $frequentRenterPoints += $addtlPoints;
             }
 
             $result .= "\t" . '<li>' . $rental->movie()->name() . ' - ' . $thisAmount . '</li>' . PHP_EOL; // I used tabs here but I can't tell from the markdown file if that's what is being requested. They were there before so I figured I'd use them.
